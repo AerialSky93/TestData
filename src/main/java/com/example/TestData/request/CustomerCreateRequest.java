@@ -19,6 +19,8 @@ public class CustomerCreateRequest {
     @Min(1)
     @Max(1000)
     private BigDecimal feeAmount;
+
     private LocalDateTime enrollmentDate;
+
     private boolean activeFlag;
 }

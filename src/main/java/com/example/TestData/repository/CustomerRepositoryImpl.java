@@ -37,7 +37,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.transactionManager = transactionManager;
         this.transactionTemplate = new TransactionTemplate((transactionManager));
-
     }
 
     public CustomerGetResponse findByCustomerId(int customerId) {
@@ -104,9 +103,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return namedParameterJdbcTemplate.update(updateSql, params);
 
     }
-
-
-
 }
 
 

@@ -7,7 +7,5 @@ import com.example.TestData.response.CustomerGetResponse;
 public interface CustomerRepository {
     CustomerGetResponse findByCustomerId(int customerId);
     int createCustomerId(CustomerCreateRequest customerCreateRequest);
-
     int updateCustomer(CustomerUpdateRequest customerUpdateRequest);
-
 }
