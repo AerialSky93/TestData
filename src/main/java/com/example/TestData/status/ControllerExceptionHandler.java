@@ -15,12 +15,12 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
     }
 
-    /*
+
     @ExceptionHandler(value = FileNotLocatedException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorMessage> resourceNotFoundException(FileNotLocatedException ex) {
         ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), ex.getMessage());
         return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
-    }*/
+    }
 
 }
