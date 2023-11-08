@@ -57,7 +57,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql, params, mapper);
             return customerGetResponse;
         } catch (IncorrectResultSizeDataAccessException ex) {
-            throw new ResourceNotFoundException("Could Not Customer Id data");
+            throw new ResourceNotFoundException("Could Not locate Customer id data");
         }
     }
 
@@ -71,7 +71,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             List<CustomerGetResponse> customerGetResponseList = namedParameterJdbcTemplate.query(findAllSql, mapper);
             return customerGetResponseList;
         } catch (IncorrectResultSizeDataAccessException ex) {
-            throw new ResourceNotFoundException("Could Not Customer Id data");
+            throw new ResourceNotFoundException("Could Not get Customer id data");
         }
     }
 
