@@ -24,7 +24,6 @@ import java.util.Map;
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository {
 
-
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private PlatformTransactionManager transactionManager;
@@ -40,12 +39,17 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     public CustomerGetResponse findByCustomerId(int customerId) {
-
         Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);
 
+        String findByCustomerIdSql = """ 
+            SELECT firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
+            FROM dbo.customer 
+            WHERE customer_Id = :customerId
+        """;
+
         try {
-            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject("SELECT firstName, employeeId, feeAmount, enrollmentDate, activeFlag FROM dbo.customer WHERE customer_Id = :customerId",
+            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql,
                     params, BeanPropertyRowMapper.newInstance(CustomerGetResponse.class));
             return customerGetResponse;
         } catch (IncorrectResultSizeDataAccessException ex) {
@@ -57,12 +61,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         definition.setTimeout(3);
-
         TransactionStatus status = transactionManager.getTransaction(definition);
 
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-
             String insertSql = "INSERT INTO dbo.customer (firstName, employeeId, feeAmount, enrollmentDate, activeFlag) VALUES( :firstName , :employeeId, :feeAmount,  :enrollmentDate, :activeFlag)";
 
             Map<String, Object> params = new HashMap<>();
@@ -79,11 +81,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         } catch (Exception ex) {
             transactionManager.rollback(status);
         }
-
         return 0;
-
     }
-
     public int updateCustomer(CustomerUpdateRequest customerUpdateRequest) {
 
         Map<String, Object> params = new HashMap<>();
@@ -101,7 +100,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             WHERE customer_Id= :customerId
         """;
         return namedParameterJdbcTemplate.update(updateSql, params);
-
     }
 }
 
