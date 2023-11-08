@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,6 +28,12 @@ public class CustomerController {
     public CustomerGetResponse getCustomerById(@PathVariable("customerId") int customerId) {
         CustomerGetResponse customerGetResponse = customerRepository.findByCustomerId(customerId);
         return customerGetResponse;
+    }
+
+    @GetMapping("/customer")
+    public List<CustomerGetResponse> getAllCustomer() {
+        List<CustomerGetResponse> customerGetResponseList = customerRepository.findAll();
+        return customerGetResponseList;
     }
 
     @PostMapping("/customer")

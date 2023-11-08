@@ -14,18 +14,12 @@ public class ServerConfiguration {
     private String apiKey;
 
 
-    // Getting the value from that key which
-    // you set in application.properties
+    // Getting value key which are  set in application.properties
     @Bean
     public String getApiKey() {
         return apiKey;
     }
 
-
-    @Bean
-    public BeanPropertyRowMapper beanPropertyRowMapper() {
-        return new BeanPropertyRowMapper();
-    }
 
 /*    @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {

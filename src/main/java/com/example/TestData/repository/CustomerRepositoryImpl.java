@@ -19,6 +19,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -30,12 +31,16 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     private TransactionTemplate transactionTemplate;
 
+    BeanPropertyRowMapper<CustomerGetResponse> mapper;
+
     @Autowired
     public CustomerRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
                                   PlatformTransactionManager transactionManager) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.transactionManager = transactionManager;
-        this.transactionTemplate = new TransactionTemplate((transactionManager));
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
+        mapper = new BeanPropertyRowMapper<>(CustomerGetResponse.class);
+        mapper.setPrimitivesDefaultedForNullValue(true);
     }
 
     public CustomerGetResponse findByCustomerId(int customerId) {
@@ -49,9 +54,22 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         """;
 
         try {
-            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql,
-                    params, BeanPropertyRowMapper.newInstance(CustomerGetResponse.class));
+            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql, params, mapper);
             return customerGetResponse;
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            throw new ResourceNotFoundException("Could Not Customer Id data");
+        }
+    }
+
+    public List<CustomerGetResponse> findAll() {
+        String findAllSql = """ 
+            SELECT firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
+            FROM dbo.customer 
+        """;
+
+        try {
+            List<CustomerGetResponse> customerGetResponseList = namedParameterJdbcTemplate.query(findAllSql, mapper);
+            return customerGetResponseList;
         } catch (IncorrectResultSizeDataAccessException ex) {
             throw new ResourceNotFoundException("Could Not Customer Id data");
         }
@@ -63,9 +81,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         definition.setTimeout(3);
         TransactionStatus status = transactionManager.getTransaction(definition);
 
+        String insertSql = """ 
+            INSERT INTO dbo.customer (firstName, employeeId, feeAmount, enrollmentDate, activeFlag) 
+            VALUES( :firstName , :employeeId, :feeAmount,  :enrollmentDate, :activeFlag)
+            """;
+
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            String insertSql = "INSERT INTO dbo.customer (firstName, employeeId, feeAmount, enrollmentDate, activeFlag) VALUES( :firstName , :employeeId, :feeAmount,  :enrollmentDate, :activeFlag)";
 
             Map<String, Object> params = new HashMap<>();
             params.put("firstName", customerCreateRequest.getFirstName());
@@ -74,17 +96,15 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             params.put("enrollmentDate", customerCreateRequest.getEnrollmentDate());
             params.put("activeFlag", customerCreateRequest.isActiveFlag());
 
-            int rowsAffected = namedParameterJdbcTemplate.update(insertSql, new MapSqlParameterSource(params), generatedKeyHolder);
+            namedParameterJdbcTemplate.update(insertSql, new MapSqlParameterSource(params), generatedKeyHolder);
             transactionManager.commit(status);
             return generatedKeyHolder.getKey().intValue();
-
         } catch (Exception ex) {
             transactionManager.rollback(status);
+            throw ex;
         }
-        return 0;
     }
     public int updateCustomer(CustomerUpdateRequest customerUpdateRequest) {
-
         Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerUpdateRequest.getCustomerId());
         params.put("firstName", customerUpdateRequest.getFirstName());
@@ -120,4 +140,27 @@ FROM OPENJSON(@json) WITH (
     age INT,
     dateOfBirth DATETIME2 '$.dob'
     );
+
+
+CREATE TABLE [dbo].[Customer](
+	[Customer_Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar](255) NOT NULL,
+	[employeeid] [int] NOT NULL,
+	[FeeAmount] [decimal](10, 2) NULL,
+	[ActiveFlag] [bit] NULL,
+	[EnrollmentDate] [datetime] NULL,
+	[JSONBlob] [nvarchar](max) NULL,
+	CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED
+	(
+		[Customer_Id] ASC
+	)
+)
+
+CREATE NONCLUSTERED INDEX NC_Customer_EmployeeId ON dbo.Customer(EmployeeId);
+
+ALTER TABLE dbo.Customer ADD CONSTRAINT FK_Customer_EmployeeId FOREIGN KEY (EmployeeId) REFERENCES Employee(Employee_Id);
+
+
+            List<CustomerGetResponse> customerGetResponseList = namedParameterJdbcTemplate.query(findAllSql,
+                    BeanPropertyRowMapper.newInstance(CustomerGetResponse.class));
  */
