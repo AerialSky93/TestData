@@ -23,7 +23,7 @@ public class FileController {
     Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @GetMapping("/file")
-    public List<String> getFileInput() throws IOException {
+    public List<String> getFileText() throws IOException {
 
         List<String> dataLines = new ArrayList<>();
         Resource companyDataResource = new ClassPathResource("readfiles/companies.txt");
