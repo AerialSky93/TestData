@@ -2,7 +2,6 @@ package com.example.TestData.controller;
 
 
 import com.example.TestData.status.FileNotLocatedException;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -21,14 +20,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class FileController {
-
     Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @GetMapping("/files")
-    public List<String> getFileInput(HttpServletResponse response) throws IOException {
+    @GetMapping("/file")
+    public List<String> getFileInput() throws IOException {
 
         List<String> dataLines = new ArrayList<>();
-        Resource companyDataResource = new ClassPathResource("readfiles/companies2.txt");
+        Resource companyDataResource = new ClassPathResource("readfiles/companies.txt");
         File file  = null;
 
         try {
@@ -51,6 +49,4 @@ public class FileController {
 
         return dataLines;
     }
-
-
 }
