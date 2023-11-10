@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class CustomerController {
 
     private CustomerRepository customerRepository;
@@ -31,6 +32,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
+
     public List<CustomerGetResponse> getAllCustomer() {
         List<CustomerGetResponse> customerGetResponseList = customerRepository.findAll();
         return customerGetResponseList;

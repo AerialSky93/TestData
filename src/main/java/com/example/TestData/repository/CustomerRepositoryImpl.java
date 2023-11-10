@@ -1,11 +1,13 @@
 package com.example.TestData.repository;
 
 
+import com.example.TestData.mapper.CustomerGetMapper;
 import com.example.TestData.request.CustomerCreateRequest;
 import com.example.TestData.request.CustomerUpdateRequest;
 import com.example.TestData.response.CustomerGetResponse;
 import com.example.TestData.status.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -43,18 +45,20 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         mapper.setPrimitivesDefaultedForNullValue(true);
     }
 
+    @Cacheable("customers")
     public CustomerGetResponse findByCustomerId(int customerId) {
         Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);
 
         String findByCustomerIdSql = """ 
-            SELECT firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
+            SELECT customerId, firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
             FROM dbo.customer 
-            WHERE customer_Id = :customerId
+            WHERE customerId = :customerId
         """;
 
         try {
-            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql, params, mapper);
+            //CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql, params, mapper);
+            CustomerGetResponse customerGetResponse = namedParameterJdbcTemplate.queryForObject(findByCustomerIdSql, params, new CustomerGetMapper());
             return customerGetResponse;
         } catch (IncorrectResultSizeDataAccessException ex) {
             throw new ResourceNotFoundException("Could Not locate Customer id data");
@@ -63,7 +67,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     public List<CustomerGetResponse> findAll() {
         String findAllSql = """ 
-            SELECT firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
+            SELECT customerId, firstName, employeeId, feeAmount, enrollmentDate, activeFlag 
             FROM dbo.customer 
         """;
 

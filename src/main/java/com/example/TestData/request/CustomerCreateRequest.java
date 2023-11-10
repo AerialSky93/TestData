@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class CustomerCreateRequest {
@@ -20,7 +20,7 @@ public class CustomerCreateRequest {
     @Max(1000)
     private BigDecimal feeAmount;
 
-    private LocalDateTime enrollmentDate;
+    private OffsetDateTime enrollmentDate;
 
     private boolean activeFlag;
 }
