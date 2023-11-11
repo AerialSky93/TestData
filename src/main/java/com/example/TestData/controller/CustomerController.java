@@ -1,5 +1,6 @@
 package com.example.TestData.controller;
 
+import com.example.TestData.event.CustomerPublisher;
 import com.example.TestData.repository.CustomerRepository;
 import com.example.TestData.request.CustomerCreateRequest;
 import com.example.TestData.request.CustomerUpdateRequest;
@@ -19,10 +20,12 @@ import java.util.concurrent.Executors;
 public class CustomerController {
 
     private CustomerRepository customerRepository;
+    private CustomerPublisher customerPublisher;
 
     @Autowired
-    public CustomerController(CustomerRepository customerRepository) {
+    public CustomerController(CustomerRepository customerRepository, CustomerPublisher customerPublisher) {
         this.customerRepository = customerRepository;
+        this.customerPublisher = customerPublisher;
     }
 
     @GetMapping("/customer/{customerId}")
@@ -63,6 +66,12 @@ public class CustomerController {
         }
 
         executor.shutdown();
+    }
+
+    @PostMapping("/customerevent")
+    public int createCustomerEvent(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
+        customerPublisher.publishCustomerCreate(customerCreateRequest);
+        return 1;
     }
 
     //public CustomerGetResponse getCustomerById(HttpServletResponse response, @PathVariable("id") int id) {
