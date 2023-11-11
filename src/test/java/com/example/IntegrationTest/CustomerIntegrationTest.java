@@ -44,4 +44,5 @@ public class CustomerIntegrationTest {
         assertNotNull(response.getBody());
         //JSONAssert.assertEquals(expected, response.getBody(), false);
     }
+
 }

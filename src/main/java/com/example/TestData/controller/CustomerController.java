@@ -35,8 +35,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-
-    public List<CustomerGetResponse> getAllCustomer() {
+    public List<CustomerGetResponse> getAllCustomers() {
         List<CustomerGetResponse> customerGetResponseList = customerRepository.findAll();
         return customerGetResponseList;
     }
@@ -54,7 +53,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customerRepeat")
-    public void createCustomer2(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
+    public void createCustomerRepeat(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
         Runnable runnableTask = () -> {
@@ -75,5 +74,4 @@ public class CustomerController {
     }
 
     //public CustomerGetResponse getCustomerById(HttpServletResponse response, @PathVariable("id") int id) {
-
 }
