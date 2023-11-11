@@ -82,7 +82,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public int createCustomerId(CustomerCreateRequest customerCreateRequest) {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        definition.setTimeout(3);
         TransactionStatus status = transactionManager.getTransaction(definition);
 
         String insertSql = """ 
