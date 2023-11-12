@@ -1,6 +1,7 @@
 package com.example.TestData.repository;
 
 
+import com.example.TestData.config.ServerConfiguration;
 import com.example.TestData.mapper.CustomerGetMapper;
 import com.example.TestData.request.CustomerCreateRequest;
 import com.example.TestData.request.CustomerUpdateRequest;
@@ -23,6 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository {
@@ -36,15 +38,15 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     BeanPropertyRowMapper<CustomerGetResponse> mapper;
 
     @Autowired
-    public CustomerRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+    public CustomerRepositoryImpl(ServerConfiguration serverConfiguration, NamedParameterJdbcTemplate namedParameterJdbcTemplate,
                                   PlatformTransactionManager transactionManager) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.namedParameterJdbcTemplate = serverConfiguration.namedParameterJdbcTemplate();
         this.transactionManager = transactionManager;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
         mapper = new BeanPropertyRowMapper<>(CustomerGetResponse.class);
         mapper.setPrimitivesDefaultedForNullValue(true);
     }
-
+    
     @Cacheable("customers")
     public CustomerGetResponse findByCustomerId(int customerId) {
         Map<String, Object> params = new HashMap<>();
@@ -122,7 +124,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 enrollmentDate = :enrollmentDate
             WHERE customer_Id= :customerId
         """;
-        return namedParameterJdbcTemplate.update(updateSql, params);
+        int rowCount = 0;
+
+        Integer customerId = Integer.valueOf(customerUpdateRequest.getCustomerId());
+        synchronized (customerId) {
+            rowCount = namedParameterJdbcTemplate.update(updateSql, params);
+        }
+        return rowCount;
     }
 }
 
