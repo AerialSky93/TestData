@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestDataApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration
 public class CustomerIntegrationTest {
     @LocalServerPort
     private int port;
