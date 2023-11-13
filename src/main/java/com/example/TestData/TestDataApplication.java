@@ -13,3 +13,5 @@ public class TestDataApplication {
 	}
 
 }
+
+//  mvn package azure-webapp:deploy
