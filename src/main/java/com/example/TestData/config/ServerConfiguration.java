@@ -24,8 +24,8 @@ public class ServerConfiguration {
     public DataSource getDataSource() {
         SQLServerDataSource ds = new SQLServerDataSource();
 
-        //ds.setServerName("test-data-server.database.windows.net");
-        ds.setServerName("localhost");
+        ds.setServerName("test-data-server.database.windows.net");
+        //ds.setServerName("localhost");
         ds.setUser("sauser");
         ds.setPassword("sapwd12345*");
         ds.setPortNumber(1433);
