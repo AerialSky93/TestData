@@ -46,6 +46,12 @@ public class CustomerController {
         return newId;
     }
 
+    @PostMapping("/customerpost")
+    public int createCustomerpost(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
+        int newId  = customerRepository.createCustomerId(customerCreateRequest);
+        return newId;
+    }
+
     @PutMapping("/customer")
     public int updateCustomer(HttpServletResponse response, @RequestBody CustomerUpdateRequest customerUpdateRequest) {
         int newId = customerRepository.updateCustomer(customerUpdateRequest);

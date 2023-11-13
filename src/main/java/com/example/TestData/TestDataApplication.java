@@ -14,4 +14,6 @@ public class TestDataApplication {
 
 }
 
-//  mvn package azure-webapp:deploy
+// mvn package azure-webapp:deploy
+// https://testdataapp.azurewebsites.net/api/customer
+// https://ambitious-sand-0afe31b10.4.azurestaticapps.net/
