@@ -46,7 +46,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         mapper = new BeanPropertyRowMapper<>(CustomerGetResponse.class);
         mapper.setPrimitivesDefaultedForNullValue(true);
     }
-    
+
     @Cacheable("customers")
     public CustomerGetResponse findByCustomerId(int customerId) {
         Map<String, Object> params = new HashMap<>();

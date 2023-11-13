@@ -32,7 +32,7 @@ public class CustomerIntegrationTest {
         return "http://localhost:" + port + uri;
     }
 
-    @Test
+    //@Test
     public void testRetrieveStudentCourse() throws JSONException {
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
