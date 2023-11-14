@@ -7,7 +7,9 @@ import com.example.TestData.response.CustomerGetResponse;
 import com.example.TestData.response.JobPostingCreateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JobPostingServiceImpl implements JobPostingService {
     JobPostingRepository jobPostingRepository;
     @Autowired
@@ -16,7 +18,6 @@ public class JobPostingServiceImpl implements JobPostingService {
 
     }
 
-    @Cacheable("customers")
     public JobPostingCreateResponse createJobPosting(JobPostingCreateRequest jobPostingCreateRequest) {
         return jobPostingRepository.createJobPosting(jobPostingCreateRequest);
     }
