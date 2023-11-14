@@ -7,6 +7,7 @@ import com.example.TestData.request.CustomerUpdateRequest;
 import com.example.TestData.request.JobPostingCreateRequest;
 import com.example.TestData.response.CustomerGetResponse;
 import com.example.TestData.response.JobPostingCreateResponse;
+import com.example.TestData.response.JobPostingRecentGetResponse;
 import com.example.TestData.service.CustomerService;
 import com.example.TestData.service.JobPostingService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,6 +37,13 @@ public class JobPostingController {
         JobPostingCreateResponse jobPostingCreateResponse  = jobPostingService.createJobPosting(jobPostingCreateRequest);
         return jobPostingCreateResponse;
     }
+
+    @GetMapping("/jobposting/get10MostRecent")
+    public JobPostingRecentGetResponse getMostRecentJobPostings() {
+        JobPostingRecentGetResponse jobPostingCreateResponse  = jobPostingService.getMostRecentJobPostings();
+        return jobPostingCreateResponse;
+    }
+
 
 
     //public CustomerGetResponse getCustomerById(HttpServletResponse response, @PathVariable("id") int id) {

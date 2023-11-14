@@ -6,6 +6,8 @@ import com.example.TestData.request.CustomerCreateRequest;
 import com.example.TestData.request.JobPostingCreateRequest;
 import com.example.TestData.response.CustomerGetResponse;
 import com.example.TestData.response.JobPostingCreateResponse;
+import com.example.TestData.response.JobPostingRecentGetResponse;
+import com.example.TestData.response.JobPostingRecentItem;
 import com.example.TestData.status.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -77,10 +79,35 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
             throw ex;
         }
     }
+
+    public JobPostingRecentGetResponse getMostRecentJobPostings() {
+        String findAllSql = """ 
+            SELECT TOP (10) JobPostingId
+                  ,JobDescription
+                  ,JobRequirements
+                  ,PosterLastName
+                  ,ContactInfo
+                  ,PostingDate
+              FROM dbo.JobPosting
+              order by PostingDate desc
+        """;
+
+        try {
+            List<JobPostingRecentItem> jobPostingRecentItems = namedParameterJdbcTemplate.query(findAllSql, BeanPropertyRowMapper.newInstance(JobPostingRecentItem.class));
+            JobPostingRecentGetResponse jobPostingRecentGetResponse = new JobPostingRecentGetResponse();
+            jobPostingRecentGetResponse.setJobPostingRecentResponse(jobPostingRecentItems);
+            return jobPostingRecentGetResponse;
+        } catch (IncorrectResultSizeDataAccessException ex) {
+            throw new ResourceNotFoundException("Could Not get Customer id data");
+        }
+    }
+
 }
 
-
 /*
+
+DROP TABLE [dbo].JobPosting
+
 
 DROP TABLE [dbo].JobPosting
 CREATE TABLE [dbo].JobPosting(
@@ -88,10 +115,12 @@ CREATE TABLE [dbo].JobPosting(
 	JobDescription [varchar](255) NULL,
 	JobRequirements [varchar](255) NULL,
 	PosterLastName [varchar](255) NULL,
-	ContactInfo varchar(255)
+	ContactInfo varchar(255),
+	PostingDate [datetimeoffset](7) DEFAULT GETDATE() NULL,
 	CONSTRAINT [PK_JobPosting] PRIMARY KEY CLUSTERED
 	(
 		JobPostingId ASC
 	)
 )
+
  */

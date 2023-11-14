@@ -5,6 +5,7 @@ import com.example.TestData.repository.JobPostingRepository;
 import com.example.TestData.request.JobPostingCreateRequest;
 import com.example.TestData.response.CustomerGetResponse;
 import com.example.TestData.response.JobPostingCreateResponse;
+import com.example.TestData.response.JobPostingRecentGetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,10 @@ public class JobPostingServiceImpl implements JobPostingService {
     public JobPostingCreateResponse createJobPosting(JobPostingCreateRequest jobPostingCreateRequest) {
         return jobPostingRepository.createJobPosting(jobPostingCreateRequest);
     }
+
+    public JobPostingRecentGetResponse getMostRecentJobPostings() {
+        return jobPostingRepository.getMostRecentJobPostings();
+    }
+
 }
 
