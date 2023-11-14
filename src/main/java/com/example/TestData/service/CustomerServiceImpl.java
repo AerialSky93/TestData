@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Cacheable("customers")
     public CustomerGetResponse findByCustomerIdSvc(int customerId) {
-       return customerRepository.findByCustomerId(customerId);
+        return customerRepository.findByCustomerId(customerId);
     }
 }
 
