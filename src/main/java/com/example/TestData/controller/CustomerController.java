@@ -79,5 +79,11 @@ public class CustomerController {
         return 1;
     }
 
+    @GetMapping("/customer2/{customerId}")
+    public CustomerGetResponse getCustomerById2(@PathVariable("customerId") int customerId) {
+        CustomerGetResponse customerGetResponse = customerRepository.findByCustomerId(customerId);
+        return customerGetResponse;
+    }
+
     //public CustomerGetResponse getCustomerById(HttpServletResponse response, @PathVariable("id") int id) {
 }
