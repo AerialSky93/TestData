@@ -5,6 +5,7 @@ import com.example.TestData.repository.CustomerRepository;
 import com.example.TestData.request.CustomerCreateRequest;
 import com.example.TestData.request.CustomerUpdateRequest;
 import com.example.TestData.response.CustomerGetResponse;
+import com.example.TestData.service.CustomerService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,15 @@ import java.util.concurrent.Executors;
 @CrossOrigin
 public class CustomerController {
 
+    private CustomerService customerService;
     private CustomerRepository customerRepository;
     private CustomerPublisher customerPublisher;
 
     @Autowired
-    public CustomerController(CustomerRepository customerRepository, CustomerPublisher customerPublisher) {
+    public CustomerController(CustomerService customerService, CustomerRepository customerRepository, CustomerPublisher customerPublisher) {
         this.customerRepository = customerRepository;
         this.customerPublisher = customerPublisher;
+        this.customerService = customerService;
     }
 
     @GetMapping("/customer/{customerId}")
@@ -81,7 +84,7 @@ public class CustomerController {
 
     @GetMapping("/customer2/{customerId}")
     public CustomerGetResponse getCustomerById2(@PathVariable("customerId") int customerId) {
-        CustomerGetResponse customerGetResponse = customerRepository.findByCustomerId(customerId);
+        CustomerGetResponse customerGetResponse = customerService.findByCustomerIdSvc(customerId);
         return customerGetResponse;
     }
 
