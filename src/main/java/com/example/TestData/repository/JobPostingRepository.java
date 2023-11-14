@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface JobPostingRepository {
     JobPostingCreateResponse createJobPosting(JobPostingCreateRequest jobPostingCreateRequest);
-
 }
