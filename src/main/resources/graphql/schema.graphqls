@@ -1,0 +1,11 @@
+type Query {
+    getCustomerByIdGraphQL(customerId: Int!): CustomerGetResponse
+    customers: [CustomerGetResponse]
+}
+
+type CustomerGetResponse {
+    customerId: Int
+    firstName: String
+    employeeId: Int
+    feeAmount: Float
+}

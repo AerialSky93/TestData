@@ -10,6 +10,7 @@ import com.example.TestData.status.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -48,6 +49,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Cacheable("customers")
+    @QueryMapping
     public CustomerGetResponse findByCustomerId(int customerId) {
         Map<String, Object> params = new HashMap<>();
         params.put("customerId", customerId);
@@ -156,7 +158,7 @@ FROM OPENJSON(@json) WITH (
 CREATE TABLE [dbo].[Customer](
 	[Customer_Id] [int] IDENTITY(1,1) NOT NULL,
 	[FirstName] [varchar](255) NOT NULL,
-	[employeeid] [int] NOT NULL,
+	[employeeId] [int] NOT NULL,
 	[FeeAmount] [decimal](10, 2) NULL,
 	[ActiveFlag] [bit] NULL,
 	[EnrollmentDate] [datetime] NULL,

@@ -12,6 +12,7 @@ public class CustomerGetMapper implements RowMapper<CustomerGetResponse> {
         CustomerGetResponse customer = new CustomerGetResponse();
         customer.setCustomerId(rs.getInt("CustomerId"));
         customer.setFirstName(rs.getString("FirstName"));
+        customer.setEmployeeId(rs.getInt("employeeId"));
         customer.setFeeAmount(rs.getBigDecimal("FeeAmount"));
         customer.setActiveFlag(rs.getBoolean("ActiveFlag"));
         customer.setEnrollmentDate(rs.getObject("EnrollmentDate", OffsetDateTime.class));
